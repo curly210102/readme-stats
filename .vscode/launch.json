@@ -1,0 +1,16 @@
+{
+    "configurations": [
+    {
+        "type": "node",
+        "request": "launch",
+        "name": "Vercel Dev",
+        "runtimeExecutable": "vercel",
+        "runtimeArgs": [
+            "dev",
+        ],
+        "skipFiles": [
+            "<node_internals>/**"
+        ]
+    }
+    ]
+}
