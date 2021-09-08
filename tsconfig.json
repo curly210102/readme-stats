@@ -1,9 +1,10 @@
 {
-    "extends": "@tsconfig/node14/tsconfig.json",
-    "exclude": ["node_modules", "**/*.spec.ts"],
-    "compilerOptions": {
-        "jsx": "react",
-        "jsxFactory": "SVGRender.createElement",
-        "lib": ["DOM", "ES2020"]
-    },   
+  "extends": "@tsconfig/node14/tsconfig.json",
+  "exclude": ["node_modules", "**/*.spec.ts"],
+  "compilerOptions": {
+    "jsx": "react",
+    "jsxFactory": "SVGRender.createElement",
+    "jsxFragmentFactory": "SVGRender.Fragment",
+    "lib": ["DOM", "ES2020"]
+  }
 }

@@ -300,15 +300,16 @@ declare namespace SVGRender {
     | boolean
     | null
     | undefined;
-  type ComponentChildren = ComponentChild[] | ComponentChild;
+  type RenderChildren = (_: any) => ComponentChild;
+  type ComponentChildren = Array<RenderChildren | ComponentChild>;
   interface SVGElement {
     content: string;
     css: string[];
     $$symbol: Symbol;
   }
 
-  interface FunctionComponent<P = {}> {
-    (props: P, children: ComponentChildren): SVGElement | SVGElement[] | null;
+  interface FunctionComponent<P = {}, T = ComponentChildren> {
+    (props: P, children: T): SVGElement | SVGElement[] | null;
   }
 }
 declare namespace JSX {

@@ -69,7 +69,6 @@ export class ChineseFetcher extends Fetcher {
   async _fetchAndUpdateQuestionStats() {
     const { data } = await request({
       headers: {
-        "content-type": "application/json",
         "Content-Type": "application/json",
       },
       url: this.url,

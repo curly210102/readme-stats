@@ -1,8 +1,10 @@
 const $$symbol = Symbol("SVGElement");
 
+const Fragment = Symbol("SVGRender.Fragment");
+
 export function createElement<
   P extends SVGRender.SVGAttributes<T>,
-  T extends SVGElement,
+  T extends SVGElement
 >(
   type: keyof JSX.IntrinsicElements,
   props?: P | null,
@@ -16,7 +18,10 @@ export function createElement<T>(
 ): SVGRender.SVGElement;
 
 export function createElement<P extends {}>(
-  type: keyof JSX.IntrinsicElements | SVGRender.FunctionComponent,
+  type:
+    | keyof JSX.IntrinsicElements
+    | SVGRender.FunctionComponent
+    | typeof Fragment,
   props?: P,
   ...children: SVGRender.ComponentChildren[]
 ): SVGRender.SVGElement {
@@ -25,6 +30,28 @@ export function createElement<P extends {}>(
     css: [],
     $$symbol,
   };
+
+  // SVGRender.Fragment
+  if (type === Fragment) {
+    const cssDeclaration: string[] = [];
+    const contentList: string[] = [];
+    children.forEach((child) => {
+      const childArray = Array.isArray(child) ? child : [child];
+      childArray.forEach((child) => {
+        if (typeof child === "number") {
+          contentList.push(`${child}`);
+        } else if (typeof child === "string") {
+          contentList.push(child);
+        } else if (isValidElement(child)) {
+          cssDeclaration.push(...child.css);
+          contentList.push(child.content);
+        }
+      });
+    });
+    svgElement.css = cssDeclaration;
+    svgElement.content = `${contentList.join("")}`;
+    return svgElement;
+  }
 
   // JSX.IntrinsicElements
   if (typeof type === "string") {
@@ -76,7 +103,7 @@ export function createElement<P extends {}>(
     } else {
       svgElement.css = cssDeclaration;
       svgElement.content = `<${type}${attributes.join(" ")}>${contentList.join(
-        "",
+        ""
       )}</${type}>`;
     }
 
@@ -116,4 +143,5 @@ export default {
   createElement,
   render,
   isValidElement,
+  Fragment,
 };

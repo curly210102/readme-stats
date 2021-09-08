@@ -1,4 +1,3 @@
-import FlexLayout from "./FlexLayout";
 import SVGRender from "../helpers/SVGRender";
 import { encodeHTML } from "../utils/string";
 
@@ -55,24 +54,29 @@ const getGlobalStyles = (colors: CardColors) => {
       .primary-fill {
         fill: ${titleColor}
       }
+      .text-primary {
+        color: ${titleColor}
+      }
+      .text-secondary {
+        color: #858585
+      }
       .text-fill {
         fill: ${textColor}
       }
       .text-stroke {
         stroke: ${textColor}
       }
-      .text-secondary {
+      .fill-secondary {
         fill: #858585;
       }
+      .truncate {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 100%;
+        display: block;
+      }
 
-    @keyframes scaleInAnimation {
-      from {
-        transform: translate(-5px, 5px) scale(0);
-      }
-      to {
-        transform: translate(-5px, 5px) scale(1);
-      }
-    }
     @keyframes fadeInAnimation {
       from {
         opacity: 0;
@@ -91,7 +95,6 @@ function Gradient({ colors }: { colors: CardColors }) {
   return typeof bgColor === "object" ? (
     <defs>
       <linearGradient id="gradient" gradientTransform={`rotate(${bgColor[0]})`}>
-        $
         {gradients.map((grad, index) => {
           const offset = (index * 100) / (gradients.length - 1);
           return <stop offset={`${offset}%`} stop-color={`#${grad}`} />;
@@ -106,49 +109,41 @@ function Title({
   icon,
   paddingX,
   paddingY,
+  width,
 }: {
   title: string;
-  icon?: string;
+  icon?: string | null;
   paddingX: number;
   paddingY: number;
+  width: number;
 }) {
-  const titleText = (
-    <text
-      x="0"
-      y="0"
-      data-testid="header"
-      style={{
-        animation: "fadeInAnimation 0.8s ease-in-out forwards",
-      }}
-      class="primary-fill font-semibold text-xl"
-    >
-      {title}
-    </text>
-  );
-
   const prefixIcon = icon ? (
     <svg
       class="icon"
       x="0"
-      y="-13"
-      viewBox="0 0 16 16"
+      viewBox="0 0 30 30"
       version="1.1"
-      width="16"
-      height="16"
+      width="20"
+      height="20"
+      y="-18"
     >
       {icon}
     </svg>
   ) : null;
 
-  const content = (
-    <FlexLayout gap={25} items={[prefixIcon, titleText]}></FlexLayout>
-  );
   return (
     <g
-      data-testid="card-title"
-      transform={`translate(${paddingX}, ${paddingY})`}
+      transform={`translate(${paddingX}, ${paddingY + 18})`}
+      style={{
+        animation: "fadeInAnimation 0.8s ease-in-out forwards",
+        overflow: "hidden",
+      }}
+      width={width}
     >
-      {content}
+      {prefixIcon}
+      <text x={prefixIcon ? 26 : 0} class="primary-fill font-semibold text-xl">
+        {title}
+      </text>
     </g>
   );
 }
@@ -161,17 +156,20 @@ interface Props {
   hideBorder?: boolean;
   hideTitle?: boolean;
   isDisableAnimation?: boolean;
-  titlePrefixIcon?: string;
+  titlePrefixIcon?: string | null;
   customTitle?: string;
   defaultTitle?: string;
   paddingX?: number;
   paddingY?: number;
 }
 
-const CardContainer: SVGRender.FunctionComponent<Props> = (
+const CardContainer: SVGRender.FunctionComponent<
+  Props,
+  SVGRender.ComponentChildren
+> = (
   {
-    width = 100,
-    height = 100,
+    width = 495,
+    height = 195,
     borderRadius = 4.5,
     colors = {
       titleColor: "",
@@ -187,17 +185,27 @@ const CardContainer: SVGRender.FunctionComponent<Props> = (
     customTitle,
     defaultTitle = "",
     paddingX = 25,
-    paddingY = 35,
+    paddingY = 18,
   }: Props,
-  children,
+  children
 ) => {
   const { borderColor, bgColor } = colors;
-  const cardHeight = (height -= hideTitle ? 30 : 0);
+
+  const Header = hideTitle ? null : (
+    <Title
+      title={encodeHTML(customTitle ?? defaultTitle)}
+      icon={titlePrefixIcon}
+      paddingX={paddingX}
+      paddingY={paddingY}
+      width={width - paddingX * 2}
+    />
+  );
+
   return (
     <svg
       width={width}
-      height={cardHeight}
-      viewBox={`0 0 ${width} ${cardHeight}`}
+      height={height}
+      viewBox={`0 0 ${width} ${height}`}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       css={`
@@ -208,7 +216,6 @@ const CardContainer: SVGRender.FunctionComponent<Props> = (
       `}
     >
       <Gradient colors={colors} />
-
       <rect
         data-testid="card-bg"
         x="0.5"
@@ -221,23 +228,36 @@ const CardContainer: SVGRender.FunctionComponent<Props> = (
         stroke-opacity={hideBorder ? 0 : 1}
       />
 
-      {hideTitle ? null : (
-        <Title
-          title={encodeHTML(customTitle ?? defaultTitle)}
-          icon={titlePrefixIcon}
-          paddingX={paddingX}
-          paddingY={paddingY}
-        />
-      )}
-
-      <g
-        data-testid="main-card-body"
-        transform={`translate(0, ${hideTitle ? 25 : 20 + 35})`}
+      {Header}
+      <svg
+        x={paddingX}
+        y={Header ? 50 : paddingY}
+        style={{ overflow: "visible" }}
       >
-        {children}
-      </g>
+        {children.map((child) =>
+          typeof child === "function"
+            ? child({
+                width,
+                height,
+                innerHeight: height - (Header ? 50 : paddingY) - paddingY,
+                innerWidth: width - paddingX * 2,
+                paddingY,
+                paddingX,
+              })
+            : child
+        )}
+      </svg>
     </svg>
   );
 };
 
 export default CardContainer;
+
+export type RenderChildrenArguments = {
+  width: number;
+  height: number;
+  innerWidth: number;
+  innerHeight: number;
+  paddingY: number;
+  paddingX: number;
+};

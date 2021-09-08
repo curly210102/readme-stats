@@ -1,9 +1,11 @@
 import { VercelRequestQuery } from "@vercel/node";
-import Card, { CommonProps } from "../Card";
+import Card, { CommonProps } from "../index";
 import translation from "./translation";
 import SVGRender from "../../helpers/SVGRender";
-import CardContainer from "../../components/CardContainer";
-import { clampValue, getCardColors } from "../../utils/render";
+import CardContainer, {
+  RenderChildrenArguments,
+} from "../../components/CardContainer";
+import { getCardColors } from "../../utils/render";
 import {
   toBoolean,
   toFloatingNumber,
@@ -11,9 +13,9 @@ import {
 } from "../../utils/vercelRequestQuery";
 import { URLQueryError } from "../../helpers/Error";
 import { ChineseFetcher, EnglishFetcher } from "./fetcher";
-import CircleProgress from "../../components/CircleProgress";
 import FlexLayout from "../../components/FlexLayout";
-import { measureText } from "../../utils/string";
+import DonutChart from "../../components/charts/DonutChart";
+import icons from "../../icons";
 
 export interface Props extends CommonProps {
   /** add props */
@@ -24,6 +26,8 @@ export interface Props extends CommonProps {
   hide_title?: boolean;
   hide_progress?: boolean;
   width?: number;
+  height?: number;
+  hide_icon: boolean;
 }
 
 type FetchStats = Array<{
@@ -49,6 +53,8 @@ export default class LeetCodeCard extends Card {
       hide_title,
       hide_progress,
       width,
+      height,
+      hide_icon,
     } = query;
 
     /** initialize exclusive props */
@@ -61,6 +67,8 @@ export default class LeetCodeCard extends Card {
       hide_title: toBoolean(hide_title) ?? false,
       hide_progress: toBoolean(hide_progress) ?? false,
       width: toFloatingNumber(width),
+      height: toFloatingNumber(height),
+      hide_icon: toBoolean(hide_icon),
     };
   }
   protected checkProps() {
@@ -94,6 +102,8 @@ export default class LeetCodeCard extends Card {
       hide_title,
       hide_progress,
       width: customWidth,
+      height: customHeight,
+      hide_icon,
     } = this.props as Props;
 
     const difficultyColors = {
@@ -118,90 +128,108 @@ export default class LeetCodeCard extends Card {
       }
     );
     const submissionRate = (total.acSubmissions / total.submissions) * 100;
-    const radius = hide_progress ? 0 : 46;
-    const padding = 16;
-    const titlePaddingX = 25;
-    const height = 200;
-    const width = clampValue(
-      titlePaddingX * 2 +
-        measureText(custom_title ?? this.i18n.t("title")) * 2 +
-        radius * 2,
-      customWidth || 380 /* min */,
-      Infinity
-    );
+    const colors = getCardColors({ ...this.props });
+    const radius = 46;
+
+    const renderContent = ({
+      width,
+      innerHeight,
+      paddingY,
+      paddingX,
+    }: RenderChildrenArguments) => {
+      return (
+        <>
+          {hide_progress ? null : (
+            <g
+              transform={`translate(${
+                width - paddingX - radius * 2
+              }, ${paddingY})`}
+            >
+              <DonutChart
+                data={stats.map(({ difficulty, ac }) => {
+                  return {
+                    color:
+                      difficultyColors[
+                        difficulty.toLowerCase() as keyof typeof difficultyColors
+                      ],
+                    percent: (ac / total.count) * 100,
+                  };
+                })}
+                radius={radius}
+              >
+                <text class="text-xl font-semibold" x="0" y="-4">
+                  <tspan dx="0">
+                    {submissionRate.toFixed(1).split(".")[0]}
+                  </tspan>
+                  <tspan class="text-sm" dy="-0.1em">
+                    .{submissionRate.toFixed(1).split(".")[1]}%
+                  </tspan>
+                </text>
+                <text class="text-sm fill-secondary" x="0" y="12">
+                  {this.i18n.t("submitText")}
+                </text>
+              </DonutChart>
+            </g>
+          )}
+          <g
+            class="fadeIn"
+            style={{ "animation-delay": "150ms" }}
+            transform="translate(0, 8)"
+          >
+            <text class="font-semibold">
+              <tspan class="fill-secondary text-sm">
+                {this.i18n.t("solved")}
+              </tspan>
+              <tspan class="text-fill text-2xl" dy="1.2em" x="0">
+                {total.ac}
+              </tspan>
+            </text>
+          </g>
+
+          <g transform={`translate(0, ${innerHeight - 32})`}>
+            <FlexLayout
+              items={stats.map(({ difficulty, ac, count }, index) => {
+                return (
+                  <text
+                    class="fadeIn font-semibold"
+                    style={`animation-delay: ${(index + 2) * 150}ms`}
+                  >
+                    <tspan
+                      fill={
+                        difficultyColors[
+                          difficulty.toLowerCase() as keyof typeof difficultyColors
+                        ]
+                      }
+                    >
+                      {this.i18n.t(difficulty.toLowerCase())}
+                    </tspan>
+                    <tspan dy="1.4em" x="0" opacity="0.8" class="font-sans">
+                      <tspan class="text-fill font-semibold">{ac}</tspan>
+                      <tspan class="fill-secondary text-sm font-medium">
+                        /{count}
+                      </tspan>
+                    </tspan>
+                  </text>
+                );
+              })}
+              gap={100}
+            ></FlexLayout>
+          </g>
+        </>
+      );
+    };
 
     return (
       <CardContainer
-        colors={getCardColors(this.props)}
-        width={width}
-        height={height}
+        colors={colors}
+        width={customWidth}
+        height={customHeight}
         defaultTitle={this.i18n.t("title")}
         customTitle={custom_title}
         hideTitle={hide_title}
-        paddingX={titlePaddingX}
+        titlePrefixIcon={hide_icon ? null : icons.logo.leetcode}
       >
-        {hide_progress ? null : (
-          <CircleProgress
-            progress={submissionRate}
-            radius={radius}
-            transform={`translate(${width - padding - radius}, ${
-              hide_title ? 24 : 8
-            })`}
-          >
-            <text class="text-xl font-semibold" x="0" y="-4">
-              <tspan dx="0">{submissionRate.toFixed(1).split(".")[0]}</tspan>
-              <tspan class="text-sm" dx="0" dy="2">
-                .{submissionRate.toFixed(1).split(".")[1]}%
-              </tspan>
-            </text>
-            <text class="text-sm text-secondary" x="0" y="14">
-              {this.i18n.t("submitText")}
-            </text>
-          </CircleProgress>
-        )}
-        <g
-          transform={`translate(${titlePaddingX}, 0)`}
-          class="fadeIn"
-          style={{ "animation-delay": "150ms" }}
-        >
-          <text class="font-semibold">
-            <tspan class="text-secondary text-sm">
-              {this.i18n.t("solved")}
-            </tspan>
-            <tspan class="text-fill text-2xl" dy="1.2em" x="0">
-              {total.ac}
-            </tspan>
-          </text>
-        </g>
-        <g transform={`translate(${titlePaddingX}, ${height - 100})`}>
-          <FlexLayout
-            items={stats.map(({ difficulty, ac, count }, index) => {
-              return (
-                <text
-                  class="fadeIn"
-                  style={`animation-delay: ${(index + 2) * 150}ms`}
-                >
-                  <tspan
-                    fill={
-                      difficultyColors[
-                        difficulty.toLowerCase() as keyof typeof difficultyColors
-                      ]
-                    }
-                  >
-                    {this.i18n.t(difficulty.toLowerCase())}
-                  </tspan>
-                  <tspan dy="1.4em" x="0" opacity="0.8" class="font-sans">
-                    <tspan class="text-fill font-semibold">{ac}</tspan>
-                    <tspan class="text-secondary text-sm font-medium">
-                      /{count}
-                    </tspan>
-                  </tspan>
-                </text>
-              );
-            })}
-            gap={Math.min((width - padding) / 3, 100)}
-          ></FlexLayout>
-        </g>
+        {renderContent}
       </CardContainer>
     );
   }

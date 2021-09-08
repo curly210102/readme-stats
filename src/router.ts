@@ -1,4 +1,4 @@
-import LeetCode from "./leetcode";
+import LeetCode from "./cards/leetcode";
 
 export default {
   leetcode: LeetCode,
