@@ -1,6 +1,6 @@
-<p align="center">
+# Readme Stats
 
-[英文](./README.md) **[简体中文](./docs/README-CN.md)**
+[English](./README.md) **[简体中文](./docs/README-CN.md)**
 
 > 在 Readme 里展示动态统计信息
 
@@ -8,15 +8,13 @@
 
 👀 支持更多卡片 🎈 易于创建新卡片 🌈 主题系统
 
-</p>
-
-# 👀 支持的卡片
+## 👀 支持的卡片
 
 - [LeetCode](#leetcode)
 
 🚀 可以在 [Readme Editor]() 预览和尝试多种卡片效果，无需记住复杂的配置项。[Readme Editor]() 还支持其他流行的 readme 组件，比如 github-readme-stats, github-readme-streak-stats 等等。
 
-## LeetCode
+### LeetCode
 
 > 支持国际站 leetcode.com 和中国站 leetcode-cn.com，通过 URL 中的 region 参数设置，例如，`region=en` 和 `region=cn`
 
@@ -24,15 +22,11 @@
 
 🔗 [https://readme-stats-curly210102.vercel.app/api/leetcode?username=neal_wu](https://readme-stats-curly210102.vercel.app/api/leetcode?username=neal_wu)
 
----
-
 [![](https://readme-stats-curly210102.vercel.app/api/leetcode?username=neal_wu&layout=progress)](https://readme-stats-curly210102.vercel.app/api/leetcode?username=neal_wu&layout=progress)
 
 🔗 [https://readme-stats-curly210102.vercel.app/api/leetcode?username=neal_wu&layout=progress](https://readme-stats-curly210102.vercel.app/api/leetcode?username=neal_wu&layout=progress)
 
----
-
-# 🎈 创建你的卡片
+## 🎈 创建你的卡片
 
 在内置的 SVG 组件基础上，你可以自行搭建想要的卡片，步骤如下：
 
@@ -46,11 +40,11 @@
 8. 完成本地开发后，更新远程代码
 9. 进入 [Vercel 控制台](https://vercel.com/dashboard), 预览并发布
 
-# 🌈 主题系统
+## 🌈 主题系统
 
 项目沿用了 [anuraghazra/github-readme-stats](https://github.com/anuraghazra/github-readme-stats) 的主题系统, 可以使用已存在主题或者通过 URL 参数设置。
 
-# 👏🏻 贡献
+## 👏🏻 贡献
 
 欢迎贡献 🤗，最佳贡献途径：
 
@@ -61,7 +55,7 @@
 
 你的一点力量都可以帮助项目成长，非常感谢。
 
-# ❤️ Thanks
+## ❤️ Thanks
 
 这个项目受到以下前辈项目启发：
 

@@ -1,6 +1,6 @@
-<p align="center">
+# Readme Stats
 
-**[English](./README.md)** [Chinese](./docs/README-CN.md)
+**[English](./README.md)** [简体中文](./docs/README-CN.md)
 
 > Show dynamically generated stats on your readmes!
 
@@ -8,15 +8,13 @@ Show dynamic statistics with remote svg resource, you can re-use it in everywher
 
 👀 More Cards 🎈 Easy to Create New Card 🌈 Theme System
 
-</p>
-
-# 👀 Supported Card
+## 👀 Supported Card
 
 - [LeetCode](#leetcode)
 
 🚀 You can preview and combine various card effects in [Readme Editor](), no need to remember complicated configurations. [Readme Editor]() also support other popular readme components like github-readme-stats, github-readme-streak-stats and so on.
 
-## LeetCode
+### LeetCode
 
 > Support leetcode.com and leetcode-cn.com, set by region parameter, e.g. `region=en` and `region=cn`
 
@@ -24,15 +22,11 @@ Show dynamic statistics with remote svg resource, you can re-use it in everywher
 
 🔗 [https://readme-stats-curly210102.vercel.app/api/leetcode?username=neal_wu](https://readme-stats-curly210102.vercel.app/api/leetcode?username=neal_wu)
 
----
-
 [![](https://readme-stats-curly210102.vercel.app/api/leetcode?username=neal_wu&layout=progress)](https://readme-stats-curly210102.vercel.app/api/leetcode?username=neal_wu&layout=progress)
 
 🔗 [https://readme-stats-curly210102.vercel.app/api/leetcode?username=neal_wu&layout=progress](https://readme-stats-curly210102.vercel.app/api/leetcode?username=neal_wu&layout=progress)
 
----
-
-# 🎈 Create your own Card
+## 🎈 Create your own Card
 
 Based on **SVG Components**, you can build out the Card you wanted
 
@@ -46,11 +40,11 @@ Based on **SVG Components**, you can build out the Card you wanted
 8. Finish local development, push the code to remote.
 9. Goto [Vercel dashboard](https://vercel.com/dashboard), Preview then deploy to production
 
-# 🌈 Theme System
+## 🌈 Theme System
 
 Follow the awesome theme system created by [anuraghazra/github-readme-stats](https://github.com/anuraghazra/github-readme-stats), you can use the exist themes or configure with parameters.
 
-# 👏🏻 Contribute
+## 👏🏻 Contribute
 
 Welcome to contribute 🤗, it's wonderful to
 
@@ -61,7 +55,7 @@ Welcome to contribute 🤗, it's wonderful to
 
 Little contribution can make the project stronger, Thx a lot.
 
-# ❤️ Thanks
+## ❤️ Thanks
 
 This project is inspired by
 
