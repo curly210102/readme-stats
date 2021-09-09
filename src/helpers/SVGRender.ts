@@ -72,7 +72,7 @@ export function createElement<P extends {}>(
         }
         if (name === "css") {
           cssDeclaration.push(value as string);
-        } else {
+        } else if (stringifyValue) {
           attributes.push(`${name}="${stringifyValue}"`);
         }
       });

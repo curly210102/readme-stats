@@ -43,11 +43,10 @@ const DonutChart: SVGRender.FunctionComponent<Props> = (
               "stroke-width": barWidth,
               "stroke-linecap": data.length > 1 ? "unset" : "round",
               transform: `rotate(${-90 + (prevPercent / 100) * 360}deg)`,
-              animation: `rankAnimation${index} 0.2s forwards ease-in-out ${
+              animation: `rankAnimation${index} 0.2s both ease-in-out ${
                 index * 0.1 + 0.2
               }s`,
               stroke: color,
-              opacity: 0,
             }}
             css={getProgressAnimation(0, percent, perimeter, index)}
           />
@@ -57,9 +56,10 @@ const DonutChart: SVGRender.FunctionComponent<Props> = (
       <g
         class="text-fill"
         style={{
-          animation: "scaleInAnimation 1s ease-in-out forwards",
+          animation: "scaleInAnimation 1s ease-in-out both",
         }}
         text-anchor="middle"
+        dominant-baseline="middle"
       >
         {children}
       </g>
@@ -77,11 +77,9 @@ const getProgressAnimation = (
     @keyframes rankAnimation${animationId} {
       from {
         stroke-dashoffset: ${((100 - clampValue(start, 0, 100)) / 100) * c};
-        opacity: 1;
       }
       to {
         stroke-dashoffset: ${((100 - clampValue(end, 0, 100)) / 100) * c};
-        opacity: 1;
       }
     }
     @keyframes scaleInAnimation {

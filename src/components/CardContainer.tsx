@@ -1,5 +1,7 @@
 import SVGRender from "../helpers/SVGRender";
 import { encodeHTML } from "../utils/string";
+import cx from "classnames";
+import { isLightColor } from "../utils/render";
 
 export interface CardColors {
   titleColor: string;
@@ -12,6 +14,12 @@ export interface CardColors {
 const getGlobalStyles = (colors: CardColors) => {
   const { titleColor, textColor, iconColor } = colors;
   return `
+  :root {
+    --primary-color: ${titleColor};
+    --secondary-color: #858585;
+    --describe-color: ${textColor};
+    --icon-color: ${iconColor}
+  }
       svg {
         font-family: 'Segoe UI', Ubuntu, Sans-Serif;
         font-weight: 400;
@@ -46,28 +54,28 @@ const getGlobalStyles = (colors: CardColors) => {
       }
   
       .icon {
-        fill: ${iconColor};
+        fill: var(--icon-color);
       }
       .primary-stroke {
-        stroke: ${titleColor}
+        stroke: var(--primary-color);
       }
       .primary-fill {
-        fill: ${titleColor}
+        fill: var(--primary-color);
       }
       .text-primary {
-        color: ${titleColor}
+        color: var(--primary-color);
       }
       .text-secondary {
-        color: #858585
+        color: var(--secondary-color);
       }
       .text-fill {
-        fill: ${textColor}
+        fill: var(--describe-color);
       }
       .text-stroke {
-        stroke: ${textColor}
+        stroke: var(--describe-color);
       }
       .fill-secondary {
-        fill: #858585;
+        fill: var(--secondary-color);
       }
       .truncate {
         overflow: hidden;
@@ -163,10 +171,7 @@ interface Props {
   paddingY?: number;
 }
 
-const CardContainer: SVGRender.FunctionComponent<
-  Props,
-  SVGRender.ComponentChildren
-> = (
+const CardContainer: SVGRender.FunctionComponent<Props> = (
   {
     width = 495,
     height = 195,
@@ -214,6 +219,13 @@ const CardContainer: SVGRender.FunctionComponent<
           ? `* { animation-duration: 0s !important; animation-delay: 0s !important; }`
           : ""}
       `}
+      class={cx(
+        isLightColor(
+          Array.isArray(colors.bgColor) ? colors.bgColor[0] : colors.bgColor
+        )
+          ? "light"
+          : "dark"
+      )}
     >
       <Gradient colors={colors} />
       <rect

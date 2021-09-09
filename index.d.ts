@@ -308,8 +308,8 @@ declare namespace SVGRender {
     $$symbol: Symbol;
   }
 
-  interface FunctionComponent<P = {}, T = ComponentChildren> {
-    (props: P, children: T): SVGElement | SVGElement[] | null;
+  interface FunctionComponent<P = {}> {
+    (props: P, children: ComponentChildren): SVGElement | SVGElement[] | null;
   }
 }
 declare namespace JSX {

@@ -78,3 +78,12 @@ export function getCardColors(
 export function clampValue(num: number, min: number, max: number) {
   return Math.max(min, Math.min(num, max));
 }
+
+export function isLightColor(color: string) {
+  const rgb =
+    color.length === 3
+      ? color.match(/([a-z0-9]{1})/gi)?.map((a) => parseInt(a + a, 16))
+      : color.match(/([a-z0-9]{2})/gi)?.map((a) => parseInt(a, 16));
+
+  return rgb && 0.213 * rgb[0] + 0.715 * rgb[1] + 0.072 * rgb[2] > 255 / 2;
+}
