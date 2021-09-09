@@ -1,34 +1,18 @@
 import { readdirSync, readFileSync } from "fs";
 import { join, extname, basename } from "path";
 
-const iconMap: {
-  [key: string]: {
-    [key: string]: string;
-  };
-} = {};
-readdirSync(__dirname, {
-  withFileTypes: true,
-}).forEach((dirent) => {
+const fileStrings: { [key: string]: string } = {};
+const files = readdirSync(__dirname);
+
+files.forEach((fileName) => {
   try {
-    if (dirent.isDirectory()) {
-      const fileStrings: { [key: string]: string } = {};
-
-      const dirname = join(__dirname, dirent.name);
-      const files = readdirSync(dirname);
-
-      files.forEach((fileName) => {
-        try {
-          if (extname(fileName) === ".svg") {
-            const fileContent = readFileSync(join(dirname, fileName), {
-              encoding: "utf8",
-            });
-            fileStrings[basename(fileName, ".svg")] = fileContent;
-          }
-        } catch (e) {}
+    if (extname(fileName) === ".svg") {
+      const fileContent = readFileSync(join(__dirname, fileName), {
+        encoding: "utf8",
       });
-      iconMap[dirent.name] = fileStrings;
+      fileStrings[basename(fileName, ".svg")] = fileContent;
     }
   } catch (e) {}
 });
 
-export default iconMap;
+export default fileStrings;

@@ -3,7 +3,7 @@ import SVGRender from "../helpers/SVGRender";
 import { encodeHTML } from "../utils/string";
 
 interface Props {
-  error: Error;
+  error: CardError;
 }
 const Error: SVGRender.FunctionComponent<Props> = ({ error }) => {
   return (

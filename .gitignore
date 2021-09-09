@@ -118,3 +118,9 @@ dist
 .pnp.*
 
 .vercel
+
+# package lock file
+package-lock.json
+
+# tsc compile output
+output

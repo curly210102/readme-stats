@@ -68,7 +68,7 @@ export default class LeetCodeCard extends Card {
       hide_progress: toBoolean(hide_progress) ?? false,
       width: toFloatingNumber(width),
       height: toFloatingNumber(height),
-      hide_icon: toBoolean(hide_icon),
+      hide_icon: toBoolean(hide_icon) ?? false,
     };
   }
   protected checkProps() {
@@ -227,7 +227,7 @@ export default class LeetCodeCard extends Card {
         defaultTitle={this.i18n.t("title")}
         customTitle={custom_title}
         hideTitle={hide_title}
-        titlePrefixIcon={hide_icon ? null : icons.logo.leetcode}
+        titlePrefixIcon={hide_icon ? null : icons.leetcode}
       >
         {renderContent}
       </CardContainer>

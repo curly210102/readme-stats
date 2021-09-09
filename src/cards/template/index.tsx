@@ -1,5 +1,5 @@
 import { VercelRequestQuery } from "@vercel/node";
-import Card, { CommonProps } from "../Card";
+import Card, { CommonProps } from "../index";
 import translation from "./translation";
 import SVGRender from "../../helpers/SVGRender";
 import CardContainer from "../../components/CardContainer";
