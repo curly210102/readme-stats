@@ -2,28 +2,25 @@ const $$symbol = Symbol("SVGElement");
 
 const Fragment = Symbol("SVGRender.Fragment");
 
-export function createElement<
-  P extends SVGRender.SVGAttributes<T>,
-  T extends SVGElement
->(
+export function createElement<P extends SVGRender.SVGAttributes>(
   type: keyof JSX.IntrinsicElements,
   props?: P | null,
-  ...children: SVGRender.ComponentChildren[]
+  ...children: SVGRender.ComponentChildren
 ): SVGRender.SVGElement;
 
 export function createElement<T>(
   type: SVGRender.FunctionComponent,
   props?: T | null,
-  ...children: SVGRender.ComponentChildren[]
+  ...children: SVGRender.ComponentChildren
 ): SVGRender.SVGElement;
 
-export function createElement<P extends {}>(
+export function createElement<P extends Record<string, unknown>>(
   type:
     | keyof JSX.IntrinsicElements
     | SVGRender.FunctionComponent
     | typeof Fragment,
   props?: P,
-  ...children: SVGRender.ComponentChildren[]
+  ...children: SVGRender.ComponentChildren
 ): SVGRender.SVGElement {
   const svgElement: SVGRender.SVGElement = {
     content: "",
@@ -97,7 +94,7 @@ export function createElement<P extends {}>(
       svgElement.css = [];
       svgElement.content = `<${type}${attributes.join(" ")}><style>${
         process.env.NODE_ENV === "test"
-          ? cssTextContent.replace(/(@keyframes\b[^\[*#@]+})/g, "")
+          ? cssTextContent.replace(/(@keyframes\b[^[*#@]+})/g, "")
           : cssTextContent
       }</style>${contentList.join("")}</${type}>`;
     } else {
@@ -130,8 +127,12 @@ export function createElement<P extends {}>(
   return svgElement;
 }
 
-export function isValidElement(element: any): element is SVGRender.SVGElement {
-  return element ? element.$$symbol === $$symbol : false;
+export function isValidElement(
+  element: unknown
+): element is SVGRender.SVGElement {
+  return typeof element === "object" && element
+    ? (element as SVGRender.SVGElement).$$symbol === $$symbol
+    : false;
 }
 
 export function render(element: SVGRender.SVGElement | string): string {

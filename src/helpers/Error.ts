@@ -55,7 +55,7 @@ export class FetchStatError extends CardError {
     };
     super(
       "Something wrong with fetch data",
-      additionMessage ?? type2Message[type],
+      additionMessage ?? type2Message[type]
     );
     this.name = "FetchStatError";
   }

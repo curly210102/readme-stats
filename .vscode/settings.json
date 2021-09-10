@@ -1,23 +1,18 @@
 {
-    "debug.javascript.autoAttachFilter": "smart",
-    "debug.javascript.autoAttachSmartPattern": [
-        "**/vercel/**"
-    ],
-    "cSpell.words": [
-        "Leetcode",
-        "Repos",
-        "Vercel",
-        "Waka",
-        "testid",
-        "wakatime"
-    ],
-    "editor.formatOnSave": true,
-    "files.exclude": {
-        "**/.git": true,
-        "**/.svn": true,
-        "**/.hg": true,
-        "**/CVS": true,
-        "**/.DS_Store": true,
-        "**/*.js": {"when": "$(basename).ts"}
-    }
+  "debug.javascript.autoAttachFilter": "smart",
+  "debug.javascript.autoAttachSmartPattern": ["**/vercel/**"],
+  "cSpell.words": ["Leetcode", "Repos", "Vercel", "Waka", "testid", "wakatime"],
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/*.js": { "when": "$(basename).ts" }
+  }
 }

@@ -1,6 +1,6 @@
 import SVGRender from "../helpers/SVGRender";
 import LanguageLabel from "./LanguageLabel";
-export const getLayoutHeight = (count: number) => {
+export const getLayoutHeight = (count: number): number => {
   return 90 + Math.round(count / 2) * 25;
 };
 
@@ -9,7 +9,7 @@ interface Props {
     size: number;
     color?: string | null;
     name: string;
-    [_: string]: any;
+    [_: string]: unknown;
   }>;
   width: number;
   showLangInfo?: boolean;

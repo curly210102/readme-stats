@@ -12,11 +12,11 @@ export default class I18n {
     this.translation = translation;
   }
 
-  public setTranslation(translation: ITranslation) {
+  public setTranslation(translation: ITranslation): void {
     this.translation = translation;
   }
 
-  public t(str: string) {
+  public t(str: string): string {
     if (!this.translation[str]) {
       throw new Error(`${str} Translation string not found`);
     }
@@ -28,7 +28,7 @@ export default class I18n {
     return this.translation[str][this.locale];
   }
 
-  public isLocaleAvailable() {
+  public isLocaleAvailable(): boolean {
     const key =
       "title" in this.translation ? "title" : Object.keys(this.translation)[0];
     return key

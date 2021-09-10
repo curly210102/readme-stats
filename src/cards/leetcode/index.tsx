@@ -39,7 +39,7 @@ export type FetchStats = Array<{
   submissions: number;
 }>;
 
-export default class LeetCodeCard extends Card {
+export default class LeetCodeCard extends Card<Props, FetchStats> {
   constructor(props: VercelRequestQuery) {
     super(props, translation);
   }
@@ -74,11 +74,11 @@ export default class LeetCodeCard extends Card {
       layout: toString(layout) ?? "official",
     };
   }
-  protected checkProps() {
+  protected checkProps(): void {
     super.checkProps();
     /** check exclusive props */
 
-    const { region } = this.props as Props;
+    const { region } = this.props;
 
     if (!["en", "cn"].includes(region)) {
       throw new URLQueryError(URLQueryError.TYPE.INVALID, "region");
@@ -87,7 +87,7 @@ export default class LeetCodeCard extends Card {
 
   protected async fetchStats(): Promise<FetchStats> {
     /** request data */
-    const { region, username } = this.props as Props;
+    const { region, username } = this.props;
     const fetcher =
       region === "cn"
         ? new ChineseFetcher(username)
@@ -107,7 +107,7 @@ export default class LeetCodeCard extends Card {
       height: customHeight,
       hide_icon,
       layout,
-    } = this.props as Props;
+    } = this.props;
 
     const total = stats.reduce(
       (acc, cur) => {
@@ -141,10 +141,11 @@ export default class LeetCodeCard extends Card {
             layout === "progress" ? ProgressLayout : OfficialLayout;
           return (
             <Layout
-              props={this.props as Props}
-              stats={stats.concat([total])}
+              props={this.props}
+              stats={stats}
               card={card}
               i18n={this.i18n}
+              total={total}
             />
           );
         }}

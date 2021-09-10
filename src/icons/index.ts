@@ -12,7 +12,9 @@ files.forEach((fileName) => {
       });
       fileStrings[basename(fileName, ".svg")] = fileContent;
     }
-  } catch (e) {}
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 export default fileStrings;

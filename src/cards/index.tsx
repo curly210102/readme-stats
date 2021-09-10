@@ -9,7 +9,8 @@ import {
 } from "../utils/vercelRequestQuery";
 import { logger } from "../utils/debug";
 import SVGRender, { render } from "../helpers/SVGRender";
-import Error from "../components/Error";
+import EmptyContainer from "../components/EmptyContainer";
+import ErrorContainer from "../components/ErrorContainer";
 
 export interface CommonProps {
   username: string;
@@ -25,14 +26,14 @@ export interface CommonProps {
   theme?: string;
 }
 
-export default class Card {
+export default abstract class Card<T extends CommonProps, P> {
   static CATCH_SECONDS = {
     THIRTY_MINUTES: 1800,
     TWO_HOURS: 7200,
     FOUR_HOURS: 14400,
     ONE_DAY: 86400,
   };
-  protected props: CommonProps;
+  protected props: T;
   protected "i18n";
 
   constructor(query: VercelRequestQuery, translation: ITranslation) {
@@ -56,18 +57,22 @@ export default class Card {
       return render(svgElement);
     } catch (err) {
       logger.log(err);
-      return render(<Error error={err} />);
+      if (err instanceof Error) {
+        return render(<ErrorContainer error={err} />);
+      } else {
+        return render(<EmptyContainer />);
+      }
     }
   }
 
-  protected getCacheSeconds() {
+  protected getCacheSeconds(): number {
     const { cache_seconds } = this.props;
     const { TWO_HOURS, ONE_DAY } = Card.CATCH_SECONDS;
 
     return Math.max(TWO_HOURS, Math.min(cache_seconds || TWO_HOURS, ONE_DAY));
   }
 
-  protected preprocess(query: VercelRequestQuery): CommonProps {
+  protected preprocess(query: VercelRequestQuery): T {
     const {
       title_color,
       text_color,
@@ -94,10 +99,10 @@ export default class Card {
       theme: toString(theme),
       username: toString(username) ?? "",
       locale: toString(locale)?.toLowerCase() ?? "en",
-    };
+    } as T;
   }
 
-  protected checkProps() {
+  protected checkProps(): void {
     const { username, locale } = this.props;
 
     if (!username) {
@@ -112,9 +117,14 @@ export default class Card {
     }
   }
 
-  protected async fetchStats(): Promise<any> {}
+  protected async fetchStats(): Promise<P> {
+    return {} as P;
+  }
 
-  protected renderCard(_stats: any): SVGRender.SVGElement | string {
+  protected renderCard(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _stats: P
+  ): SVGRender.SVGElement | string {
     return <svg></svg>;
   }
 }

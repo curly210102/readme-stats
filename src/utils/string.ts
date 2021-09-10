@@ -2,18 +2,25 @@ import wrap from "word-wrap";
 
 // https://stackoverflow.com/a/48073476/10629172
 export const encodeHTML = (str: string): string => {
-  return str
-    .replace(/[\u00A0-\u9999<>&](?!#)/gim, (i) => {
-      return "&#" + i.charCodeAt(0) + ";";
-    })
-    .replace(/\u0008/gim, "");
+  return (
+    str
+      .replace(/[\u00A0-\u9999<>&](?!#)/gim, (i) => {
+        return "&#" + i.charCodeAt(0) + ";";
+      })
+      // eslint-disable-next-line no-control-regex
+      .replace(/\u0008/gim, "")
+  );
 };
 
 export const lowercaseTrim = (str: string): string => {
   return str.toLowerCase().trim();
 };
 
-export function wrapTextMultiline(text: string, width = 60, maxLines = 3) {
+export function wrapTextMultiline(
+  text: string,
+  width = 60,
+  maxLines = 3
+): string[] {
   const wrapped = wrap(encodeHTML(text), { width })
     .split("\n") // Split wrapped lines to get an array of lines
     .map((line) => line.trim()); // Remove leading and trailing whitespace of each line
@@ -37,7 +44,7 @@ export function kFormatter(num: number): string {
 }
 
 // https://stackoverflow.com/a/48172630/10629172
-export function measureText(str: string, fontSize = 10) {
+export function measureText(str: string, fontSize = 10): number {
   // prettier-ignore
   const widths = [
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -65,7 +72,7 @@ export function measureText(str: string, fontSize = 10) {
     str
       .split("")
       .map((c) =>
-        c.charCodeAt(0) < widths.length ? widths[c.charCodeAt(0)] : avg,
+        c.charCodeAt(0) < widths.length ? widths[c.charCodeAt(0)] : avg
       )
       .reduce((cur, acc) => acc + cur) * fontSize
   );

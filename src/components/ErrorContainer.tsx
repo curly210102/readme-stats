@@ -3,9 +3,9 @@ import SVGRender from "../helpers/SVGRender";
 import { encodeHTML } from "../utils/string";
 
 interface Props {
-  error: CardError;
+  error: Error | CardError;
 }
-const Error: SVGRender.FunctionComponent<Props> = ({ error }) => {
+const ErrorContainer: SVGRender.FunctionComponent<Props> = ({ error }) => {
   return (
     <svg
       width="495"
@@ -44,11 +44,11 @@ const Error: SVGRender.FunctionComponent<Props> = ({ error }) => {
           {encodeHTML(error.message)}
         </tspan>
         <tspan x="25" dy="18" class="gray">
-          {error.secondaryMessage}
+          {error instanceof CardError ? error.secondaryMessage : ""}
         </tspan>
       </text>
     </svg>
   );
 };
 
-export default Error;
+export default ErrorContainer;

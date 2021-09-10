@@ -25,7 +25,7 @@ export const toInteger = (value: ValueOfQuery = ""): number | undefined => {
 };
 
 export const toFloatingNumber = (
-  value: ValueOfQuery = "",
+  value: ValueOfQuery = ""
 ): number | undefined => {
   const number = parseFloat(value.toString());
 

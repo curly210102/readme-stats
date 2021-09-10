@@ -5,15 +5,14 @@ import SVGRender from "../../helpers/SVGRender";
 import CardContainer from "../../components/CardContainer";
 import { getCardColors } from "../../utils/render";
 
-export interface Props extends CommonProps {
-  /** add props */
-}
+export type Props = CommonProps;
 
 interface FetchStats {
   /** describe fetchStats return data */
+  example?: string;
 }
 
-export default class NewCard extends Card {
+export default class NewCard extends Card<Props, FetchStats> {
   constructor(props: VercelRequestQuery) {
     super(props, translation);
   }
@@ -26,7 +25,7 @@ export default class NewCard extends Card {
       ...commonProps,
     };
   }
-  protected checkProps() {
+  protected checkProps(): void {
     super.checkProps();
     /** check exclusive props */
   }
@@ -36,12 +35,13 @@ export default class NewCard extends Card {
     return await Promise.resolve({});
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   protected renderCard(stats: FetchStats): SVGRender.SVGElement {
     /**
      * render svg, support jsx
      * you can find exist components in src/components
      */
-    const colors = getCardColors({});
+    const colors = getCardColors(this.props);
     return <CardContainer colors={colors}></CardContainer>;
   }
 }

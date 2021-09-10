@@ -1,4 +1,5 @@
 import themes from "../../themes";
+import type { CardColors } from "../components/CardContainer";
 
 function isValidGradient(colors: string[]) {
   return isValidHexColor(colors[1]) && isValidHexColor(colors[2]);
@@ -10,7 +11,7 @@ function isValidHexColor(hexColor: string) {
   ).test(hexColor);
 }
 
-function fallbackBgColor(color: string = "", defaultColor: string) {
+function fallbackBgColor(color = "", defaultColor: string) {
   const colors = color.split(",");
   let gradient = null;
 
@@ -21,7 +22,7 @@ function fallbackBgColor(color: string = "", defaultColor: string) {
   return (gradient ?? (isValidHexColor(color) && `#${color}`)) || defaultColor;
 }
 
-function fallbackColor(color: string = "", defaultColor: string) {
+function fallbackColor(color = "", defaultColor: string) {
   return isValidHexColor(color) ? `#${color}` : defaultColor;
 }
 
@@ -42,7 +43,7 @@ export function getCardColors(
     border_color?: string;
   },
   fallbackTheme: keyof typeof themes = "default"
-) {
+): CardColors {
   const defaultTheme = themes[fallbackTheme];
   const selectedTheme = (theme ? themes[theme] : defaultTheme) || defaultTheme;
   const defaultBorderColor =
@@ -75,15 +76,15 @@ export function getCardColors(
   return { titleColor, iconColor, textColor, bgColor, borderColor };
 }
 
-export function clampValue(num: number, min: number, max: number) {
+export function clampValue(num: number, min: number, max: number): number {
   return Math.max(min, Math.min(num, max));
 }
 
-export function isLightColor(color: string) {
+export function isLightColor(color: string): boolean {
   const rgb =
     color.length === 3
       ? color.match(/([a-z0-9]{1})/gi)?.map((a) => parseInt(a + a, 16))
       : color.match(/([a-z0-9]{2})/gi)?.map((a) => parseInt(a, 16));
 
-  return rgb && 0.213 * rgb[0] + 0.715 * rgb[1] + 0.072 * rgb[2] > 255 / 2;
+  return !!rgb && 0.213 * rgb[0] + 0.715 * rgb[1] + 0.072 * rgb[2] > 255 / 2;
 }

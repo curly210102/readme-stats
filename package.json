@@ -4,7 +4,17 @@
   "description": "Generate stats for readme",
   "main": "index.js",
   "scripts": {
-    "create": "node scripts/create-new-card"
+    "create": "node scripts/create-new-card",
+    "prepare": "husky install",
+    "lint": "eslint --ext .ts,.tsx .",
+    "format": "prettier --write \"./**/*.ts?(x)\"",
+    "fix": "eslint --fix"
+  },
+  "lint-staged": {
+    "**/*.ts?(x)": [
+      "prettier --write",
+      "eslint"
+    ]
   },
   "author": "Curly Brackets",
   "license": "MIT",
@@ -15,12 +25,17 @@
     "@babel/preset-typescript": "^7.15.0",
     "@tsconfig/node14": "^1.0.1",
     "@types/github-username-regex": "^1.0.0",
+    "@typescript-eslint/eslint-plugin": "^4.31.0",
+    "@typescript-eslint/parser": "^4.31.0",
     "@vercel/node": "^1.12.0",
     "axios": "^0.21.1",
     "classnames": "^2.3.1",
+    "eslint": "^7.32.0",
     "fs-extra": "^10.0.0",
+    "husky": "^7.0.2",
+    "lint-staged": "^11.1.2",
+    "prettier": "^2.3.2",
     "typescript": "^4.4.2",
     "word-wrap": "^1.2.3"
-  },
-  "dependencies": {}
+  }
 }

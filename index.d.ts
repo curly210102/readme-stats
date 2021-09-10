@@ -5,7 +5,7 @@ declare namespace SVGRender {
   interface SVGElementAttributes {
     css?: string | undefined;
   }
-  interface SVGAttributes<T> extends SVGElementAttributes {
+  interface SVGAttributes<>extends SVGElementAttributes {
     // Attributes which also defined in HTMLAttributes
     // See comment in SVGDOMPropertyConfig.js
     class?: string | undefined;
@@ -293,22 +293,22 @@ declare namespace SVGRender {
 
   type ComponentChild =
     | SVGElement
-    | object
+    | Record<string, unknown>
     | string
     | number
     | bigint
     | boolean
     | null
     | undefined;
-  type RenderChildren = (_: any) => ComponentChild;
+  type RenderChildren = (_: Record<string, unknown>) => ComponentChild;
   type ComponentChildren = Array<RenderChildren | ComponentChild>;
   interface SVGElement {
     content: string;
     css: string[];
-    $$symbol: Symbol;
+    $$symbol: symbol;
   }
 
-  interface FunctionComponent<P = {}> {
+  interface FunctionComponent<P = Record<string, unknown>> {
     (props: P, children: ComponentChildren): SVGElement | SVGElement[] | null;
   }
 }

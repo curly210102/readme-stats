@@ -24,7 +24,7 @@ const BarChart: SVGRender.FunctionComponent<Props> = ({
   barWidth = 6,
   layout,
 }: Props) => {
-  const renderBar = ({ color, percent }: Props["data"][0], top: number = 0) => {
+  const renderBar = ({ color, percent }: Props["data"][0], top = 0) => {
     return (
       <g transform={`translate(0, ${barWidth / 2 + top})`}>
         <line

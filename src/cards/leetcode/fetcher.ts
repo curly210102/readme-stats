@@ -5,7 +5,7 @@ async function request(axiosConfig: AxiosRequestConfig) {
   try {
     return await axios(axiosConfig);
   } catch (e) {
-    if (e.response) {
+    if (axios.isAxiosError(e) && e.response) {
       const { status } = e.response;
       if (status >= 500) {
         throw new FetchStatError(FetchStatError.TYPE.UNEXPECTED);
@@ -60,13 +60,15 @@ class Fetcher {
       return aIndex - bIndex;
     });
   }
-  async _fetchAndUpdateQuestionStats() {}
+  async _fetchAndUpdateQuestionStats(): Promise<void> {
+    return;
+  }
 }
 
 export class ChineseFetcher extends Fetcher {
   url = "https://leetcode-cn.com/graphql/";
 
-  async _fetchAndUpdateQuestionStats() {
+  async _fetchAndUpdateQuestionStats(): Promise<void> {
     const { data } = await request({
       headers: {
         "Content-Type": "application/json",
@@ -171,7 +173,7 @@ export class ChineseFetcher extends Fetcher {
 
 export class EnglishFetcher extends Fetcher {
   url = "https://leetcode.com/graphql/";
-  async _fetchAndUpdateQuestionStats() {
+  async _fetchAndUpdateQuestionStats(): Promise<void> {
     const { data } = await request({
       url: this.url,
       method: "post",

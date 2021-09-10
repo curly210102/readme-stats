@@ -10,6 +10,7 @@ interface Props {
   stats: Stats;
   card: RenderChildrenArguments;
   i18n: I18n;
+  total: Stats["0"];
 }
 
 const OfficialLayout: SVGRender.FunctionComponent<Props> = ({
@@ -17,6 +18,7 @@ const OfficialLayout: SVGRender.FunctionComponent<Props> = ({
   stats,
   card,
   i18n,
+  total,
 }) => {
   const { hide_progress } = props;
   const { width, paddingX, paddingY, innerHeight } = card;
@@ -26,7 +28,6 @@ const OfficialLayout: SVGRender.FunctionComponent<Props> = ({
     medium: "#FFB800",
     hard: "#EF4743",
   };
-  const total = stats.pop()!;
   const submissionRate = (total.acSubmissions / total.submissions) * 100;
   return (
     <>
