@@ -8,13 +8,19 @@
     "prepare": "husky install",
     "lint": "eslint --ext .ts,.tsx .",
     "format": "prettier --write \"./**/*.ts?(x)\"",
-    "fix": "eslint --fix"
+    "fix": "eslint --fix",
+    "commit": "git-cz"
   },
   "lint-staged": {
     "**/*.ts?(x)": [
       "prettier --write",
       "eslint"
     ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "@commitlint/cz-commitlint"
+    }
   },
   "author": "Curly Brackets",
   "license": "MIT",
@@ -23,6 +29,9 @@
     "@babel/plugin-transform-react-jsx": "^7.14.9",
     "@babel/preset-env": "^7.15.0",
     "@babel/preset-typescript": "^7.15.0",
+    "@commitlint/cli": "^13.1.0",
+    "@commitlint/config-conventional": "^13.1.0",
+    "@commitlint/cz-commitlint": "^13.1.0",
     "@tsconfig/node14": "^1.0.1",
     "@types/github-username-regex": "^1.0.0",
     "@typescript-eslint/eslint-plugin": "^4.31.0",
@@ -30,6 +39,7 @@
     "@vercel/node": "^1.12.0",
     "axios": "^0.21.1",
     "classnames": "^2.3.1",
+    "commitizen": "^4.2.4",
     "eslint": "^7.32.0",
     "fs-extra": "^10.0.0",
     "husky": "^7.0.2",
